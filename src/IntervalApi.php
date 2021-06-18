@@ -23,7 +23,7 @@ class IntervalApi
 {
     private $apiClient;
 
-    function __construct(Client $apiClient)
+    public function __construct(Client $apiClient)
     {
         $this->apiClient = $apiClient;
     }
@@ -72,7 +72,7 @@ class IntervalApi
      * @return array[\Budbee\Model\OrderIntervalResponse]
      * @deprecated deprecated in favour of getIntervals($country, $postalCode, $n)
      */
-    public function getIntervals($postalCode, $n)
+    public function getIntervalsOld($postalCode, $n)
     {
         //parse inputs
         $resourcePath = "/intervals/{postalCode}/{n}";
@@ -84,7 +84,7 @@ class IntervalApi
         );
 
         if (null != $n) {
-        	$resourcePath = str_replace("{postalCode}", $this->apiClient->toPathValue($postalCode), $resourcePath);
+            $resourcePath = str_replace("{postalCode}", $this->apiClient->toPathValue($postalCode), $resourcePath);
             $resourcePath = str_replace("{n}", $this->apiClient->toPathValue($n), $resourcePath);
         }
         //make the API Call
@@ -145,7 +145,7 @@ class IntervalApi
      * @return array[\Budbee\Model\OrderInterval]
      * @deprecated deprecated in favour of getIntervalsToDate($country, $postalCode, $date)
      */
-    public function getIntervalsToDate($postalCode, $date)
+    public function getIntervalsToDateOld($postalCode, $date)
     {
         //parse inputs
         $resourcePath = "/intervals/{postalCode}/{date}";
@@ -157,7 +157,7 @@ class IntervalApi
         );
 
         if (null != $date) {
-        	$resourcePath = str_replace("{postalCode}", $this->apiClient->toPathValue($postalCode), $resourcePath);
+            $resourcePath = str_replace("{postalCode}", $this->apiClient->toPathValue($postalCode), $resourcePath);
             $resourcePath = str_replace("{date}", $this->apiClient->toPathValue($date), $resourcePath);
         }
         //make the API Call
@@ -174,4 +174,3 @@ class IntervalApi
         return $responseObject;
     }
 }
-

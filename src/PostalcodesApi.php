@@ -23,7 +23,7 @@ class PostalcodesApi
 {
     private $apiClient;
 
-    function __construct(Client $apiClient)
+    public function __construct(Client $apiClient)
     {
         $this->apiClient = $apiClient;
     }
@@ -73,7 +73,7 @@ class PostalcodesApi
      * @return array[\Budbee\Model\CollectionPoint] An array of collectionpoints in range of the postalcode
      * @deprecated deprecated in favour of checkPostalCode($country, $postalcode)
      */
-    public function checkPostalCode($postalcode)
+    public function checkPostalCodeOld($postalcode)
     {
         //parse inputs
         $resourcePath = "/postalcodes/validate/{postalcode}";
@@ -141,7 +141,7 @@ class PostalcodesApi
      * @return array[string]
      * @deprecated deprecated in favour of getPostalCodes($country)
      */
-    public function getPostalCodes()
+    public function getPostalCodesOld()
     {
         //parse inputs
         $resourcePath = "/postalcodes";
@@ -166,4 +166,3 @@ class PostalcodesApi
         return $responseObject;
     }
 }
-
