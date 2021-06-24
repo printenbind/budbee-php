@@ -23,13 +23,14 @@ use \JsonSerializable;
  */
 class Order implements JsonSerializable
 {
-    static $dataTypes = array(
+    public static $dataTypes = array(
         'id' => 'string',
         'interval' => '\Budbee\Model\OrderInterval',
         'cart' => '\Budbee\Model\Cart',
         'edi' => '\Budbee\Model\EDI',
         'collection' => '\Budbee\Model\Contact',
-        'delivery' => '\Budbee\Model\Contact'
+        'delivery' => '\Budbee\Model\Contact',
+        'parcels' => 'array[\Budbee\Model\Parcel]'
     );
 
     /**
@@ -68,15 +69,22 @@ class Order implements JsonSerializable
      */
     public $delivery;
 
+    /**
+     * List of parcels belonging to this order.
+     * @var array[\Budbee\Model\Parcel]
+     */
+    public $parcels;
+
     public function jsonSerialize()
     {
-    	return array(
-    		'id' => $this->id,
-    		'interval' => $this->interval,
-    		'cart' => $this->cart,
-    		'edi' => $this->edi,
-    		'collection' => $this->collection,
-    		'delivery' => $this->delivery
-    	);
+        return array(
+            'id' => $this->id,
+            'interval' => $this->interval,
+            'cart' => $this->cart,
+            'edi' => $this->edi,
+            'collection' => $this->collection,
+            'delivery' => $this->delivery,
+            'parcels' => $this->parcels
+        );
     }
 }

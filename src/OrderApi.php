@@ -25,7 +25,7 @@ class OrderApi
 {
     private $apiClient;
 
-    function __construct(Client $apiClient)
+    public function __construct(Client $apiClient)
     {
         $this->apiClient = $apiClient;
     }
@@ -89,6 +89,43 @@ class OrderApi
         }
 
         $responseObject = $this->apiClient->deserialize($response, 'array[\Budbee\Model\Order]');
+        return $responseObject;
+    }
+
+    /**
+     * Edit an the delivery contact of an order
+     * @param string $id ID of order to edit
+     * @param \Budbee\Model\Contact $body
+     * @return \Budbee\Model\Order
+     */
+    public function addParcels($id, $body)
+    {
+        //parse inputs
+        $resourcePath = "/multiple/orders/{id}/parcels";
+        $method = Client::$POST;
+        $queryParams = array();
+        $headerParams = array(
+            'Accept' => 'application/vnd.budbee.multiple.orders-v1+json',
+            'Content-Type' => 'application/vnd.budbee.multiple.orders-v1+json'
+        );
+
+        if (!isset($id)) {
+            throw new BudbeeException("Id cannot be null");
+        }
+
+        $resourcePath = str_replace("{id}", $this->apiClient->toPathValue($id), $resourcePath);
+
+        //make the API Call
+        if (!isset($body)) {
+            $body = null;
+        }
+        $response = $this->apiClient->callAPI($resourcePath, $method, $queryParams, $body, $headerParams);
+
+        if (!$response) {
+            return null;
+        }
+
+        $responseObject = $this->apiClient->deserialize($response, 'array[\Budbee\Model\Parcel]');
         return $responseObject;
     }
 
@@ -292,6 +329,34 @@ class OrderApi
         return $responseObject;
     }
 
+    public function getTrackTrace($id)
+    {
+        //parse inputs
+        $resourcePath = "/multiple/orders/{id}/tracking-url";
+        $method = Client::$GET;
+        $queryParams = array();
+
+        if (null != $id) {
+            $resourcePath = str_replace("{id}", $this->apiClient->toPathValue($id), $resourcePath);
+        }
+
+        $headerParams = array(
+            'Accept' => 'application/vnd.budbee.multiple.orders-v1+json',
+            'Content-Type' => 'application/vnd.budbee.multiple.orders-v1+json'
+        );
+
+        $body = null;
+
+        $response = $this->apiClient->callAPI($resourcePath, $method, $queryParams, $body, $headerParams);
+
+        if (!$response) {
+            return null;
+        }
+
+        $responseObject = $this->apiClient->deserialize($response, '\Budbee\Model\TrackTrace');
+        return $responseObject;
+    }
+
     private function arrayContainsNull($orders)
     {
         foreach ($orders as $order) {
@@ -303,4 +368,3 @@ class OrderApi
         return false;
     }
 }
-
