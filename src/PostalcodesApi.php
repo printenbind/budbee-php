@@ -56,6 +56,9 @@ class PostalcodesApi
         if (!isset($body)) {
             $body = null;
         }
+
+        // return [ $resourcePath, $method, $queryParams, $body, $headerParams ];
+
         $response = $this->apiClient->callAPI($resourcePath, $method, $queryParams, $body, $headerParams);
 
         if (!$response) {
@@ -98,6 +101,134 @@ class PostalcodesApi
         }
 
         $responseObject = $this->apiClient->deserialize($response, 'array[\Budbee\Model\CollectionPoint]');
+
+        return $responseObject;
+    }
+
+    protected function lockerSampleData()
+    {
+        return json_decode('
+        {
+          "lockers": [
+            {
+              "id": "BOX0001",
+              "address": {
+                "street": "Buitenveldertselaan 39",
+                "postalCode": "1081JX",
+                "city": "Amsterdam",
+                "country": "NL",
+                "coordinate": {
+                    "latitude": 52.32455,
+                    "longitude": 4.8659163
+                }
+              },
+              "estimatedDelivery": "2022-04-15T14:00:00Z",
+              "cutoff": "2022-04-16T09:00:00Z",
+              "distance": 50,
+              "name": "Budbee JumboBox",
+              "directions": "Bij de ingang aan de linkerkant",
+              "label": "Budbee Kontorsbox (morgen 16:00)",
+              "openingHours": {
+                "periods": [
+                  { "open": { "day": "MONDAY", "time": "08:00" }, "close": {"day": "MONDAY", "time": "19:00" } },
+                  { "open": { "day": "TUESDAY", "time": "08:00" }, "close": {"day": "TUESDAY", "time": "19:00" } },
+                  { "open": { "day": "WEDNESDAY", "time": "08:00" }, "close": {"day": "WEDNESDAY", "time": "19:00" } },
+                  { "open": { "day": "THURSDAY", "time": "08:00" }, "close": {"day": "THURSDAY", "time": "19:00" } },
+                  { "open": { "day": "FRIDAY", "time": "00:00" }, "close": null },
+                  { "open": { "day": "SATURDAY", "time": "10:00" }, "close": {"day": "SATURDAY", "time": "15:00" } }
+                ],
+                "weekdayText": [
+                  "Monday: 08 - 19",
+                  "Tuesday: 08 - 19",
+                  "Wednesday: 08 - 19",
+                  "Thursday: 08 - 19",
+                  "Friday: 08 - 19",
+                  "Saturday: 10 - 15",
+                  "Sunday: Closed"
+                ]
+              }
+            }
+          ]
+        }');
+    }
+
+    /**
+     * Check AvailableLockers
+     * @param string $country Country code
+     * @param string $postalcode Postalcode to validate
+     * @return array[\Budbee\Model\Locker] An array of lockers in range of the postalcode
+     */
+    public function checkAvailableLockers($country, $postalcode)
+    {
+        //parse inputs
+        $resourcePath = "/boxes/postalcodes/validate/{country}/{postalcode}";
+        $method = Client::$GET;
+        $queryParams = array();
+        $headerParams = array(
+            'Accept' => 'application/vnd.budbee.postalcodes-v1+json',
+            'Content-Type' => 'application/vnd.budbee.postalcodes-v1+json'
+        );
+
+        if (null != $country) {
+            $resourcePath = str_replace("{country}", $this->apiClient->toPathValue($country), $resourcePath);
+        }
+
+        if (null != $postalcode) {
+            $resourcePath = str_replace("{postalcode}", $this->apiClient->toPathValue($postalcode), $resourcePath);
+        }
+        //make the API Call
+        if (!isset($body)) {
+            $body = null;
+        }
+
+        // $response = $this->apiClient->callAPI($resourcePath, $method, $queryParams, $body, $headerParams);
+        $response = $this->lockerSampleData();
+        if (isset($response->lockers)) {
+            $response = $response->lockers;
+        }
+
+        if (!$response) {
+            return false;
+        }
+
+        $responseObject = $this->apiClient->deserialize($response, 'array[\Budbee\Model\Locker]');
+
+        return $responseObject;
+    }
+
+    /**
+     * Check AvailableLockers
+     * @param string $country Country code
+     * @param string $postalcode Postalcode to validate
+     * @return array[\Budbee\Model\Locker] An array of lockers in range of the postalcode
+     */
+    public function checkAvailableLockersCountry($country)
+    {
+        //parse inputs
+        $resourcePath = "/boxes/all/{country}";
+        $method = Client::$GET;
+        $queryParams = array();
+        $headerParams = array(
+            'Accept' => 'application/vnd.budbee.postalcodes-v1+json',
+            'Content-Type' => 'application/vnd.budbee.postalcodes-v1+json'
+        );
+
+        if (null != $country) {
+            $resourcePath = str_replace("{country}", $this->apiClient->toPathValue($country), $resourcePath);
+        }
+
+        //make the API Call
+        if (!isset($body)) {
+            $body = null;
+        }
+
+        $response = $this->apiClient->callAPI($resourcePath, $method, $queryParams, $body, $headerParams);
+
+        if (!$response) {
+            return false;
+        }
+
+        $responseObject = $this->apiClient->deserialize($response, 'array[\Budbee\Model\Locker]');
 
         return $responseObject;
     }
