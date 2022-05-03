@@ -165,8 +165,8 @@ class PostalcodesApi
         $method = Client::$GET;
         $queryParams = array();
         $headerParams = array(
-            'Accept' => 'application/vnd.budbee.postalcodes-v1+json',
-            'Content-Type' => 'application/vnd.budbee.postalcodes-v1+json'
+            'Accept' => 'application/vnd.budbee.boxes-v1+json',
+            'Content-Type' => 'application/vnd.budbee.boxes-v1+json'
         );
 
         if (null != $country) {
@@ -181,8 +181,8 @@ class PostalcodesApi
             $body = null;
         }
 
-        // $response = $this->apiClient->callAPI($resourcePath, $method, $queryParams, $body, $headerParams);
-        $response = $this->lockerSampleData();
+        $response = $this->apiClient->callAPI($resourcePath, $method, $queryParams, $body, $headerParams);
+        // $response = $this->lockerSampleData();
         if (isset($response->lockers)) {
             $response = $response->lockers;
         }
@@ -209,8 +209,8 @@ class PostalcodesApi
         $method = Client::$GET;
         $queryParams = array();
         $headerParams = array(
-            'Accept' => 'application/vnd.budbee.postalcodes-v1+json',
-            'Content-Type' => 'application/vnd.budbee.postalcodes-v1+json'
+            'Accept' => 'application/vnd.budbee.boxes-v1+json',
+            'Content-Type' => 'application/vnd.budbee.boxes-v1+json'
         );
 
         if (null != $country) {
