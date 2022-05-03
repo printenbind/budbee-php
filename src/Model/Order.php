@@ -30,7 +30,8 @@ class Order implements JsonSerializable
         'edi' => '\Budbee\Model\EDI',
         'collection' => '\Budbee\Model\Contact',
         'delivery' => '\Budbee\Model\Contact',
-        'parcels' => 'array[\Budbee\Model\Parcel]'
+        'parcels' => 'array[\Budbee\Model\Parcel]',
+        'productCodes' => 'array[string]'
     );
 
     /**
@@ -75,6 +76,12 @@ class Order implements JsonSerializable
      */
     public $parcels;
 
+    /**
+     * List of product codes belonging to this order.
+     * @var array[string]
+     */
+    public $productCodes;
+
     public function jsonSerialize()
     {
         return array(
@@ -84,7 +91,8 @@ class Order implements JsonSerializable
             'edi' => $this->edi,
             'collection' => $this->collection,
             'delivery' => $this->delivery,
-            'parcels' => $this->parcels
+            'parcels' => $this->parcels,
+            'productCodes' => $this->productCodes
         );
     }
 }

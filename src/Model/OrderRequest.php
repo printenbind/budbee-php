@@ -29,7 +29,10 @@ class OrderRequest implements JsonSerializable
         'edi' => '\Budbee\Model\EDI',
         'collectionId' => 'int',
         'delivery' => '\Budbee\Model\Contact',
-        'parcels' => 'array[\Budbee\Model\ParcelRequest]'
+        'parcels' => 'array[\Budbee\Model\ParcelRequest]',
+        'productCodes' => 'array[string]',
+        'boxDelivery' => '\Budbee\Model\BoxDelivery',
+        'additionalServices' => '\Budbee\Model\AdditionalServices'
     );
 
     /**
@@ -68,6 +71,24 @@ class OrderRequest implements JsonSerializable
      */
     public $parcels;
 
+    /**
+     * List of product codes belonging to this order.
+     * @var array[string]
+     */
+    public $productCodes;
+
+    /**
+     * Delivery contact information.
+     * @var \Budbee\Model\BoxDelivery
+     */
+    public $boxDelivery;
+
+    /**
+     * Additional Services information.
+     * @var \Budbee\Model\AdditionalServices
+     */
+    public $additionalServices;
+
     public function jsonSerialize()
     {
         return array(
@@ -76,7 +97,10 @@ class OrderRequest implements JsonSerializable
             'edi' => $this->edi,
             'collectionId' => $this->collectionId,
             'delivery' => $this->delivery,
-            'parcels' => $this->parcels
+            'parcels' => $this->parcels,
+            'productCodes' => $this->productCodes,
+            'boxDelivery' => $this->boxDelivery,
+            'additionalServices' => $this->additionalServices
         );
     }
 }
